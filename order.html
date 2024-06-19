@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin: 4px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        .code {
+            display: none;
+        }
+        .eye-icon {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Order List</h2>
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Product ID</th>
+                    <th onclick="sortTable(1)">Order ID</th>
+                    <th>Code</th>
+                    <th onclick="sortTable(3)">Entry Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>101</td>
+                    <td>5001</td>
+                    <td>
+                        <span class="code">AB123</span>
+                        <i class="fas fa-eye eye-icon" onclick="toggleCode(this)"></i>
+                    </td>
+                    <td>2024-06-19 12:34:56</td>
+                </tr>
+                <tr>
+                    <td>102</td>
+                    <td>5002</td>
+                    <td>
+                        <span class="code">CD456</span>
+                        <i class="fas fa-eye eye-icon" onclick="toggleCode(this)"></i>
+                    </td>
+                    <td>2024-06-20 08:45:12</td>
+                </tr>
+                <!-- More rows can be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function toggleCode(icon) {
+            let codeElement = icon.previousElementSibling;
+            if (codeElement.style.display === "none" || codeElement.style.display === "") {
+                codeElement.style.display = "inline";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                codeElement.style.display = "none";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function sortTable(columnIndex) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("orderTable");
+            switching = true;
+            dir = "asc"; 
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                    if (dir == "asc") {
+                        if (x.textContent.toLowerCase() > y.textContent.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.textContent.toLowerCase() < y.textContent.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

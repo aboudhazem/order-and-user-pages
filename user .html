@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin: 4px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-activate {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-deactivate {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User List</h2>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Customer Name</th>
+                    <th onclick="sortTable(1)">Phone Number</th>
+                    <th onclick="sortTable(2)">Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>mahmoud</td>
+                    <td>123-456-7890</td>
+                    <td>mahmoud.doe@example.com</td>
+                    <td>
+                        <button class="btn btn-activate" onclick="activateUser(this)">Activate</button>
+                        <button class="btn btn-deactivate btn-disabled" onclick="deactivateUser(this)" disabled>Deactivate</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ahmed </td>
+                    <td>987-654-3210</td>
+                    <td>ahmed@example.com</td>
+                    <td>
+                        <button class="btn btn-activate" onclick="activateUser(this)">Activate</button>
+                        <button class="btn btn-deactivate btn-disabled" onclick="deactivateUser(this)" disabled>Deactivate</button>
+                    </td>
+                </tr>
+                <!-- More rows can be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function activateUser(button) {
+            let row = button.closest('tr');
+            row.style.backgroundColor = '#d4edda'; // Change background to indicate activation
+            button.classList.add('btn-disabled');
+            button.disabled = true;
+            let deactivateButton = row.querySelector('.btn-deactivate');
+            deactivateButton.classList.remove('btn-disabled');
+            deactivateButton.disabled = false;
+            console.log('User activated:', row.cells[0].textContent);
+        }
+
+        function deactivateUser(button) {
+            let row = button.closest('tr');
+            row.style.backgroundColor = '#f8d7da'; // Change background to indicate deactivation
+            button.classList.add('btn-disabled');
+            button.disabled = true;
+            let activateButton = row.querySelector('.btn-activate');
+            activateButton.classList.remove('btn-disabled');
+            activateButton.disabled = false;
+            console.log('User deactivated:', row.cells[0].textContent);
+        }
+
+        function sortTable(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("userTable");
+            switching = true;
+            dir = "asc"; 
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.textContent.toLowerCase() > y.textContent.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.textContent.toLowerCase() < y.textContent.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
